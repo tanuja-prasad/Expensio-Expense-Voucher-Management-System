@@ -1,0 +1,15 @@
+const router = require('express').Router();
+const auth = require('../middleware/authMiddleware');
+const upload = require('../middleware/signatureUpload');
+const db = require('../config/db');
+const fs = require('fs/promises');
+const path = require('path');
+const crypto = require('crypto');
+const sharp = require('sharp');
+const directory = path.resolve(__dirname, '../../uploads/signatures');
+router.use(auth);
+router.get('/', async (req,res)=>{try{const [rows]=await db.execute('SELECT id,name,email,role,department,employee_code,profile_signature FROM users WHERE id=?',[req.user.id]);if(!rows.length)return res.status(404).json({message:'User not found'});res.json({success:true,data:{...rows[0],has_signature:!!rows[0].profile_signature,profile_signature:undefined}})}catch(e){console.error(e);res.status(500).json({message:'Unable to load profile'})}});
+router.post('/signature',upload.single('signature'),async(req,res)=>{let filename;try{if(!req.file)return res.status(400).json({message:'Choose a JPG or PNG signature'});const image=sharp(req.file.buffer,{limitInputPixels:4000000});const meta=await image.metadata();if(!['png','jpeg'].includes(meta.format))return res.status(400).json({message:'Invalid image'});const buf=await image.rotate().resize({width:1000,height:500,fit:'inside',withoutEnlargement:true}).png().toBuffer();filename=crypto.randomUUID()+'.png';await fs.mkdir(directory,{recursive:true});await fs.writeFile(path.join(directory,filename),buf,{flag:'wx'});const [old]=await db.execute('SELECT profile_signature FROM users WHERE id=?',[req.user.id]);await db.execute('UPDATE users SET profile_signature=? WHERE id=?',[filename,req.user.id]);if(old[0]?.profile_signature)await fs.unlink(path.join(directory,old[0].profile_signature)).catch(()=>{});res.json({success:true,message:'Profile signature saved'})}catch(e){if(filename)await fs.unlink(path.join(directory,filename)).catch(()=>{});console.error(e);res.status(500).json({message:'Unable to save signature'})}});
+router.get('/signature',async(req,res)=>{try{const [rows]=await db.execute('SELECT profile_signature FROM users WHERE id=?',[req.user.id]);const name=rows[0]?.profile_signature;if(!name||!/^[-a-f0-9]+\.png$/.test(name))return res.status(404).json({message:'No signature uploaded'});res.set('Cache-Control','private, no-store');res.type('png').sendFile(path.join(directory,name))}catch(e){res.status(500).json({message:'Unable to view signature'})}});
+router.use((err,req,res,next)=>res.status(400).json({message:err.code==='LIMIT_FILE_SIZE'?'Maximum signature size is 2 MB':'Invalid signature file'}));
+module.exports=router;

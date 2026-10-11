@@ -1,0 +1,33 @@
+@import "tailwindcss";
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#202124;background:#f8fafd;font-synthesis:none}
+*{box-sizing:border-box}body{margin:0}button{cursor:pointer}button:disabled{cursor:not-allowed}
+.exp-app{min-height:100vh;background:#f8fafd}
+.exp-sidebar{background:#fff!important;color:#202124!important;border-right:1px solid #e5e7eb}
+.exp-sidebar .text-white{color:#202124!important}
+.exp-sidebar nav a[aria-current="page"]{background:#e8f0fe!important;color:#1a73e8!important;font-weight:600}
+.exp-topbar{background:#fff!important;border-bottom:1px solid #e5e7eb!important}
+.exp-main{max-width:1650px;margin:auto}
+.exp-main .shadow-sm{box-shadow:0 1px 3px #1118270b!important}
+.exp-main input:focus,.exp-main select:focus,.exp-main textarea:focus{outline:2px solid #1a73e8;outline-offset:1px}
+.exp-login{background:#f8fafd!important}.exp-login-brand{background:#1a73e8!important}.exp-login-form{background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:clamp(20px,4vw,48px);box-shadow:0 10px 35px #1118270b}
+
+/* Accessible, CSS-only animated branding: no external assets or tracking */
+.exp-login-brand{background:linear-gradient(145deg,#12334b 0%,#174d77 100%)!important;overflow:hidden}
+.exp-motion-scene{height:280px;position:relative;isolation:isolate;max-width:480px}
+.exp-motion-halo{position:absolute;width:275px;height:275px;border-radius:50%;background:radial-gradient(circle,#ffffff25,transparent 72%);top:-12px;left:85px;animation:exp-pulse 5s ease-in-out infinite}
+.exp-motion-card{position:absolute;display:flex;flex-direction:column;gap:9px;border-radius:24px;padding:26px;box-shadow:0 22px 55px #061d3160}
+.exp-motion-card-front{top:22px;left:68px;width:285px;height:223px;background:#fff;color:#12334b;animation:exp-float 5s ease-in-out infinite}
+.exp-motion-card-back{top:0;left:155px;width:240px;height:190px;background:#a6d7ff;color:#103753;transform:rotate(11deg);opacity:.85;animation:exp-tilt 6s ease-in-out infinite}
+.exp-motion-card span{font-size:12px;font-weight:800;letter-spacing:.15em}
+.exp-motion-card b{font-size:19px;line-height:1.25}
+.exp-motion-card small{font-size:12px;opacity:.7}
+.exp-motion-logo{width:65px;height:65px;display:grid;place-items:center;border-radius:16px;background:#e8f0fe;color:#1a73e8}
+.exp-motion-track{height:7px;background:#e8f0fe;border-radius:20px;overflow:hidden;margin-top:auto}
+.exp-motion-track i{display:block;width:45%;height:100%;background:#1a73e8;border-radius:20px;animation:exp-track 3s ease-in-out infinite}
+.exp-motion-check{position:absolute;left:325px;top:182px;display:grid;place-items:center;background:#22c55e;color:white;border:5px solid #174d77;width:60px;height:60px;border-radius:50%;font-size:28px;font-weight:800;animation:exp-pop 4s ease-in-out infinite}
+@keyframes exp-float{50%{transform:translateY(-13px)}}
+@keyframes exp-tilt{50%{transform:rotate(6deg) translateY(8px)}}
+@keyframes exp-pulse{50%{transform:scale(1.16);opacity:.65}}
+@keyframes exp-track{50%{transform:translateX(120%)}}
+@keyframes exp-pop{50%{transform:scale(1.13)}}
+@media(prefers-reduced-motion:reduce){.exp-motion-scene *{animation:none!important}}
