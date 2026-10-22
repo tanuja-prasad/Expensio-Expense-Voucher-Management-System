@@ -1,395 +1,432 @@
-# Expensio — Expense Voucher Management System
+# Expensio – Expense Voucher Management System
 
-A full-stack web application for managing employee expense claims, Director approvals, and Accounts reimbursement tracking through a centralized, role-based workflow.
+**GitHub Repository:** [Expensio – Expense Voucher Management System](https://github.com/tanuja-prasad/Expensio-Expense-Voucher-Management-System)
 
-**Developed by:** Tanuja Prasad  
-**Program:** Master of Computer Applications (MCA)  
-**Institution:** MIT World Peace University, Pune
-
-[![React](https://img.shields.io/badge/Frontend-React-61DAFB?logo=react&logoColor=black)](https://react.dev/)
-[![Node.js](https://img.shields.io/badge/Runtime-Node.js-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
-[![Express.js](https://img.shields.io/badge/Backend-Express.js-000000?logo=express)](https://expressjs.com/)
-[![MySQL](https://img.shields.io/badge/Database-MySQL-4479A1?logo=mysql&logoColor=white)](https://www.mysql.com/)
-[![JWT](https://img.shields.io/badge/Auth-JWT-000000?logo=jsonwebtokens)](https://jwt.io/)
-
-**Repository:** [Expensio — Expense Voucher Management System](https://github.com/tanuja-prasad/Expensio-Expense-Voucher-Management-System)
+**Submitted by:** Tanuja Prasad  
+**Course:** MCA  
+**College:** MIT World Peace University, Pune
 
 ---
 
-## Table of Contents
+## 1. Project Overview
 
-- [Overview](#overview)
-- [Problem Statement](#problem-statement)
-- [Key Features](#key-features)
-- [Technology Stack](#technology-stack)
-- [System Architecture](#system-architecture)
-- [User Roles and Permissions](#user-roles-and-permissions)
-- [Voucher Lifecycle](#voucher-lifecycle)
-- [Dashboard and Analytics](#dashboard-and-analytics)
-- [Database Design](#database-design)
-- [API Documentation](#api-documentation)
-- [Security and Validation](#security-and-validation)
-- [Project Structure](#project-structure)
-- [Getting Started](#getting-started)
-- [Environment Configuration](#environment-configuration)
-- [Future Enhancements](#future-enhancements)
-- [Learning Outcomes](#learning-outcomes)
-- [Project Status](#project-status)
-- [Author](#author)
+I developed **Expensio**, a web-based Expense Voucher Management System, to make the process of managing employee expense claims easier and more organized.
 
-## 1. Overview
+In a manual expense management process, employees may need to maintain records, submit expense claims, follow up for approvals, and check whether their reimbursement has been completed. Managing these activities manually can make it difficult to track the status of claims and maintain proper records.
 
-Expensio is a web-based Expense Voucher Management System designed to digitize and streamline the employee expense reimbursement workflow.
+To solve this problem, I developed Expensio, where employees can create and submit expense vouchers, Directors can approve or reject them, and the Accounts department can review approved vouchers and track reimbursement status.
 
-The application manages the expense claim lifecycle, starting with voucher creation by an employee and continuing through Director approval or rejection and Accounts reimbursement tracking.
+The application has separate dashboards for Employees, Directors, and Accounts users. Each role has different permissions, and access to the application's features is controlled through backend authorization.
 
-It provides dedicated interfaces for employees, Directors, and Accounts personnel, ensuring that each role can access the functionality and information relevant to its responsibilities.
+The main objective of this project was to understand how a real-world business workflow can be converted into a full-stack web application.
 
-The system replaces fragmented, manual follow-ups with a centralized platform for voucher management, approval decisions, signature handling, and expense reporting.
+## 2. Objectives
 
-### Project Objectives
+The main objectives of Expensio are:
 
-- Digitize employee expense voucher creation and submission.
-- Establish a structured approval process with clear status tracking.
-- Implement role-based access control and employee-specific data access.
-- Maintain approval records, signatures, and rejection reasons.
-- Provide dashboards for monitoring expenses and workflow progress.
-- Support Accounts personnel in tracking reimbursement completion.
+- To digitize the employee expense voucher process.
+- To allow employees to create, edit, and submit expense claims.
+- To implement a proper approval workflow for Directors.
+- To maintain approval decisions and rejection reasons.
+- To provide role-based dashboards and access control.
+- To store voucher and user information in a relational database.
+- To allow Accounts users to review submitted vouchers and track reimbursements.
+- To reduce manual follow-ups and make expense records easier to manage.
 
-## 2. Problem Statement
+## 3. Technology Stack
 
-Traditional expense claim processes can involve paper forms, manual record maintenance, repeated follow-ups, and limited visibility into approval progress.
+I used the following technologies to develop this project.
 
-These processes make it difficult to track pending claims, maintain consistent records, and distinguish between approved expenses and completed reimbursements.
+| Component | Technology |
+|---|---|
+| Frontend | React.js, Vite |
+| Styling | Tailwind CSS |
+| Routing | React Router |
+| API Requests | Axios |
+| Backend | Node.js, Express.js |
+| Database | MySQL |
+| Database Connectivity | mysql2 |
+| Authentication | JSON Web Token (JWT) |
+| Password Hashing | bcryptjs |
+| File Uploads | Multer |
+| Image Processing | Sharp |
+| Version Control | Git and GitHub |
 
-Expensio addresses these challenges by providing a centralized system where employees submit claims, Directors make approval decisions, and Accounts personnel review vouchers and record reimbursement status.
+## 4. System Architecture
 
-## 3. Key Features
+I followed a client-server architecture in which the frontend communicates with the backend through REST APIs. The backend handles authentication, authorization, voucher operations, and database interactions.
 
-### Employee Portal
+The MySQL database stores the application's user information, expense vouchers, and approval records. Signature uploads are handled separately through the backend.
 
-- Secure login and authenticated access.
-- Create, edit, and delete personal draft vouchers.
-- Enter expense details, including department, category, date, title, description, and amount.
-- Upload or reuse an employee signature.
-- Submit signed vouchers for Director approval.
-- View personal vouchers and their current status.
-- Review rejection reasons and monitor claim progress.
-- View dashboard statistics for personal expense claims.
+### Architecture Diagram
 
-### Director Approval Dashboard
+```mermaid
+flowchart TD
+    U["Users<br/>Employee / Director / Accounts"]
+    FE["Frontend<br/>React + Vite + Tailwind CSS"]
+    API["API Communication<br/>Axios"]
+    BE["Backend<br/>Node.js + Express.js"]
+    AUTH["Authentication<br/>JWT + bcryptjs"]
+    RBAC["Authorization<br/>Role and Ownership Checks"]
+    LOGIC["Voucher Business Logic<br/>Validation and Workflow"]
+    DB[("MySQL Database")]
+    FILES["Signature Handling<br/>Multer + Sharp"]
+
+    U --> FE
+    FE --> API
+    API --> BE
+    BE --> AUTH
+    BE --> RBAC
+    BE --> LOGIC
+    LOGIC --> DB
+    LOGIC --> FILES
+```
+
+### How the System Works
+
+1. The user logs in through the React frontend.
+2. The frontend sends the login request to the Express backend.
+3. The backend verifies the user's credentials and provides the configured authentication token.
+4. When the user performs an operation, the backend checks authentication, role permissions, and ownership where required.
+5. The backend processes the request and interacts with MySQL or the signature-handling logic.
+6. The response is returned to the frontend, which updates the relevant page or dashboard.
+
+This separation helps keep the user interface, business logic, and database operations organized.
+
+## 5. User Roles and Functionalities
+
+I implemented three main roles in the application.
+
+### 5.1 Employee
+
+Employees can:
+
+- Log in to their accounts.
+- Create expense vouchers in draft status.
+- Edit or delete their own draft vouchers.
+- Enter the expense date, department, category, title, description, and amount.
+- Upload or reuse their signature.
+- Submit signed vouchers for approval.
+- View their own expense vouchers and current status.
+- View the reason when a voucher is rejected.
+- Check dashboard statistics such as total vouchers, pending claims, approved claims, rejected claims, and total claimed amount.
+
+Once an employee submits a voucher, it becomes read-only for that employee.
+
+### 5.2 Director
+
+The Director is responsible for reviewing expense claims and making approval decisions.
+
+The Director can:
 
 - View submitted vouchers awaiting approval.
 - Search and filter voucher records.
-- Review expense details and employee signatures.
+- Review voucher details and employee signatures.
 - Approve vouchers with a Director signature.
-- Reject vouchers with a mandatory written reason.
-- Monitor pending approvals, decisions, and pending expense amounts.
-- View approval-related dashboard statistics.
+- Reject vouchers by providing a reason.
+- View pending approvals and approval-related statistics.
+- Track recent approval activity.
 
-### Accounts Workspace
+Only the Director role is allowed to approve or reject vouchers.
 
-- Access the organization-wide register of submitted vouchers.
-- Review voucher details, approval decisions, and signatures.
-- Search and filter records.
-- View organization-level expense statistics.
-- Track approved expenses requiring reimbursement.
-- Record reimbursement status as `NOT_PAID` or `PAID` through the optional Accounts payment extension.
+### 5.3 Accounts
 
-**Important:** Recording a voucher as paid updates its reimbursement status. It does not initiate a bank transfer or execute a financial transaction.
+The Accounts department is responsible for reviewing vouchers and tracking reimbursement progress.
 
-### Additional Capabilities
+Accounts users can:
 
-- RESTful API architecture.
-- JWT-based authentication.
-- Password hashing with bcryptjs.
-- Backend-enforced role and ownership checks.
-- Signature uploads using Multer and image processing using Sharp.
-- Input validation and workflow-state restrictions.
-- MySQL relational database integration using `mysql2` and parameterized SQL queries.
+- View organization-wide submitted vouchers.
+- Review voucher details and approval decisions.
+- View employee and Director signatures.
+- Search and filter voucher records.
+- View dashboard statistics and approved expense amounts.
+- Track approved vouchers that require reimbursement.
 
-## 4. Technology Stack
+I also designed an additional payment-tracking feature through which Accounts users can mark approved vouchers as `NOT_PAID` or `PAID`.
 
-| Layer | Technologies |
-|---|---|
-| Frontend | React, Vite |
-| Styling | Tailwind CSS |
-| Navigation | React Router |
-| API communication | Axios |
-| Backend | Node.js, Express.js |
-| API architecture | REST APIs |
-| Database | MySQL |
-| Database connectivity | `mysql2`, parameterized SQL |
-| Authentication | JSON Web Tokens (JWT) |
-| Password security | bcryptjs |
-| File uploads | Multer |
-| Image processing | Sharp |
-| Development tools | npm, Git, GitHub |
+This feature records the reimbursement status in the application. It does not initiate an actual bank transfer.
 
-## 5. System Architecture
+## 6. Voucher Workflow and System Design
 
-Expensio follows a client-server architecture that separates the user interface, backend business logic, and database operations.
+The voucher workflow is one of the main parts of Expensio. I designed it so that a voucher moves through specific states instead of allowing users to change its status arbitrarily.
 
-```text
-                 Employee / Director / Accounts
-                              |
-                              v
-                   React + Vite Frontend
-                 Tailwind CSS / React Router
-                              |
-                              v
-                       Axios API Client
-                              |
-                              v
-                    Express.js REST API
-                              |
-                  +-----------+-----------+
-                  |           |           |
-                  v           v           v
-             Authentication  RBAC      Validation
-              and JWT      Middleware   and Rules
-                  |           |           |
-                  +-----------+-----------+
-                              |
-                              v
-                    Business Logic Layer
-                              |
-                    +---------+---------+
-                    |                   |
-                    v                   v
-               MySQL Database     Signature Handling
-               mysql2 / SQL       Multer / Sharp
-                    |
-                    v
-              Voucher Records,
-              Approval Data,
-              User Information
+### Voucher Lifecycle Diagram
+
+```mermaid
+stateDiagram-v2
+    [*] --> DRAFT: Create voucher
+
+    DRAFT --> DRAFT: Edit draft
+    DRAFT --> [*]: Delete draft
+    DRAFT --> PENDING_APPROVAL: Submit signed voucher
+
+    PENDING_APPROVAL --> APPROVED: Director approves
+    PENDING_APPROVAL --> REJECTED: Director rejects
+
+    APPROVED --> [*]
+    REJECTED --> [*]
 ```
 
-### Architectural Principles
+### Workflow Explanation
 
-- **Separation of concerns:** Frontend components, API routes, controllers, middleware, and database operations have distinct responsibilities.
-- **Centralized business logic:** Voucher transitions and authorization rules are enforced by the backend.
-- **Relational data management:** MySQL maintains relationships between users, vouchers, and approval records.
-- **API-driven communication:** The frontend communicates with the backend through REST endpoints.
-- **Role-aware access:** Requests are checked against authentication, ownership, and authorization rules.
+**1. Draft Creation**
 
-## 6. User Roles and Permissions
+The employee creates a voucher and enters the required expense information. The voucher remains in `DRAFT` status.
 
-| Capability | Employee | Director | Accounts |
-|---|---|---|---|
-| View personal vouchers | Yes | — | — |
-| Create draft vouchers | Yes | No | No |
-| Edit or delete own drafts | Yes | No | No |
-| Submit vouchers | Yes | No | No |
-| Review submitted vouchers | Personal claims | Organization-wide | Organization-wide |
-| Approve or reject claims | No | Yes | No |
-| Add Director approval signature | No | Yes | No |
-| View approval decisions | Own claims | Organization-wide | Organization-wide |
-| View dashboard statistics | Personal | Organization-wide | Organization-wide |
-| Update reimbursement status | No | No | Yes, if extension is enabled |
+**2. Draft Editing**
 
-The role-permission matrix describes the intended access model. Each permission must be enforced by the backend rather than relying exclusively on frontend visibility.
+The employee can edit or delete the voucher while it is still a draft.
 
-## 7. Voucher Lifecycle
+**3. Submission**
 
-The application uses explicit voucher states to represent the approval workflow.
+After entering the required information and attaching a signature, the employee submits the voucher. Its status changes to `PENDING_APPROVAL`.
 
-```text
-                  Create Voucher
-                        |
-                        v
-                      DRAFT
-                        |
-                 Submit with Signature
-                        |
-                        v
-                PENDING_APPROVAL
-                   /          \
-                  /            \
-             Approve            Reject
-                |                  |
-                v                  v
-            APPROVED            REJECTED
-                |
-                v
-       Accounts Reimbursement Tracking
-                |
-          +-----+------+
-          |            |
-          v            v
-       NOT_PAID       PAID
+**4. Director Review**
+
+The Director reviews the submitted voucher and decides whether to approve or reject it.
+
+**5. Approval or Rejection**
+
+- If approved, the voucher status becomes `APPROVED`.
+- If rejected, the status becomes `REJECTED`, and the rejection reason is stored.
+
+Approved and rejected vouchers are treated as finalized expense claims in the core workflow.
+
+### Additional Reimbursement Workflow
+
+The Accounts payment-tracking extension maintains payment status separately from approval status.
+
+```mermaid
+flowchart TD
+    A["Voucher Approved"] --> B["Accounts Reviews Voucher"]
+    B --> C["NOT_PAID"]
+    C --> D["Reimbursement Recorded"]
+    D --> E["PAID"]
 ```
 
-### Workflow Rules
+This separation helps distinguish the Director's approval decision from the subsequent reimbursement process.
 
-1. **Draft creation:** An employee creates a voucher and enters the required expense details.
-2. **Draft modification:** The employee can modify or delete their own draft while it remains in `DRAFT`.
-3. **Submission:** A valid employee signature is required before submission.
-4. **Pending approval:** The voucher enters `PENDING_APPROVAL` and becomes read-only for the employee.
-5. **Director decision:** The Director approves the voucher with a signature or rejects it with a reason.
-6. **Accounts review:** Accounts personnel can inspect submitted vouchers and their approval outcomes.
-7. **Reimbursement tracking:** When the payment extension is enabled, Accounts can record whether an approved voucher has been reimbursed.
+The payment-tracking flow applies only when the optional extension is integrated into the final project.
 
-Approval status and payment status are separate concepts. A voucher may be approved but not yet paid.
+## 7. Database Design
 
-## 8. Dashboard and Analytics
+I used MySQL to store the application's data and maintain relationships between users, vouchers, and approval records.
 
-Expensio provides role-specific dashboard metrics to help users understand their workload and expense activity.
+### Database Tables
 
-### Employee Dashboard
-
-- Total personal vouchers.
-- Draft, pending, approved, and rejected counts.
-- Total amount claimed.
-- Visibility into rejection reasons and claim status.
-
-### Director Dashboard
-
-- Pending approvals.
-- Approval and rejection activity.
-- Total amount awaiting a decision.
-- Recent voucher activity.
-
-### Accounts Dashboard
-
-- Total submitted vouchers.
-- Pending approval and rejected counts.
-- Approved expense amount.
-- Recent approved vouchers.
-- Reimbursement queue metrics, when the payment extension is enabled.
-
-Dashboard values should be calculated from the underlying database records and scoped according to the authenticated user's role.
-
-## 9. Database Design
-
-The core application uses a relational MySQL schema to maintain user accounts, vouchers, and approval decisions.
-
-### Core Tables
-
-| Table | Purpose |
+| Table | Description |
 |---|---|
-| `users` | Stores user details, unique email, password hash, role, department, and optional profile signature. |
-| `vouchers` | Stores voucher number, employee reference, expense details, amount, employee signature, status, and timestamps. |
+| `users` | Stores user information, email, password hash, role, department, and optional profile signature. |
+| `vouchers` | Stores voucher number, employee reference, expense details, amount, signature, status, and timestamps. |
 | `voucher_approvals` | Stores approval or rejection decisions, Director reference, signature or rejection reason, and decision timestamp. |
-| `voucher_payments` | Optional extension table for reimbursement status, Accounts user reference, and payment timestamps. |
+| `voucher_payments` | Optional table for reimbursement status, Accounts user reference, and payment timestamps. |
 
-### Data Integrity Considerations
+### Entity Relationship Diagram
 
-- Unique voucher numbers identify individual expense claims.
-- Foreign keys connect vouchers with employees and approval records.
-- Positive expense amounts are required.
-- Approval and rejection actions are restricted by role and voucher state.
-- Employee ownership determines which drafts and personal claims can be modified or viewed.
-- Parameterized SQL queries help prevent SQL injection.
-- The optional payment extension maintains reimbursement information separately from voucher approval status.
+The following diagram represents the intended relationships between the core tables.
 
-**Schema files**
+```mermaid
+erDiagram
+    USERS ||--o{ VOUCHERS : creates
+    USERS ||--o{ VOUCHER_APPROVALS : decides
+    VOUCHERS ||--o{ VOUCHER_APPROVALS : has
+    USERS ||--o{ VOUCHER_PAYMENTS : records
+    VOUCHERS ||--o| VOUCHER_PAYMENTS : tracks
 
-- Core database schema: `backend/database/schema.sql`
-- Optional reimbursement migration: `backend/database/accounts_payment_migration.sql`
+    USERS {
+        int id PK
+        string name
+        string email UK
+        string password_hash
+        string role
+        string department
+    }
 
-The reimbursement migration should only be included in the setup instructions for the final repository if the extension has actually been merged and tested.
+    VOUCHERS {
+        int id PK
+        string voucher_number UK
+        int employee_id FK
+        date expense_date
+        string category
+        string title
+        decimal amount
+        string status
+        datetime created_at
+    }
 
-## 10. API Documentation
+    VOUCHER_APPROVALS {
+        int id PK
+        int voucher_id FK
+        int director_id FK
+        string decision
+        string rejection_reason
+        datetime decision_at
+    }
 
-The backend exposes REST endpoints for authentication, voucher management, approval decisions, signature access, and Accounts operations.
+    VOUCHER_PAYMENTS {
+        int id PK
+        int voucher_id FK
+        int paid_by FK
+        string payment_status
+        datetime paid_at
+    }
+```
 
-Base URL for local development: `http://localhost:5000/api` (assuming the backend is configured to use port `5000`).
+*Note: This is a logical representation of the database design. The optional payment table and exact columns or relationship cardinalities should be checked against the actual SQL schema and migration.*
 
-### Authentication
+### Database Design Considerations
+
+- Each voucher has a unique voucher number.
+- Each voucher is associated with the employee who created it.
+- Approval records maintain the Director's decision and related information.
+- Expense amounts must be greater than zero.
+- Payment status is separate from approval status.
+- Parameterized SQL queries are used to reduce SQL injection risks.
+- Foreign keys and other database constraints should maintain data consistency where defined in the schema.
+
+The core schema is available at `backend/database/schema.sql`.
+
+The optional reimbursement migration is `backend/database/accounts_payment_migration.sql`, if included in the final repository.
+
+## 8. API Design
+
+I used REST APIs to connect the frontend with the backend. The APIs are grouped according to authentication, employee voucher operations, approval operations, and Accounts functionality.
+
+The following endpoints are based on the documented implementation.
+
+### Authentication APIs
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| POST | `/auth/login` | Authenticate a user |
-| GET | `/auth/me` | Retrieve the authenticated user's information |
+| POST | `/api/auth/login` | Authenticate a user |
+| GET | `/api/auth/me` | Retrieve the current user's information |
 
-### Employee Voucher Operations
-
-| Method | Endpoint | Purpose |
-|---|---|---|
-| GET | `/vouchers/my` | List the employee's vouchers |
-| GET | `/vouchers/my/stats` | Retrieve personal voucher statistics |
-| POST | `/vouchers` | Create a draft voucher |
-| PUT | `/vouchers/:id` | Update an owned draft |
-| DELETE | `/vouchers/:id` | Delete an owned draft |
-| POST | `/vouchers/:id/signature` | Upload an employee signature |
-| POST | `/vouchers/:id/submit` | Submit a signed draft |
-
-### Director and Accounts Operations
+### Employee APIs
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| GET | `/review` | List submitted vouchers accessible to the role |
-| GET | `/review/stats` | Retrieve review dashboard statistics |
-| GET | `/review/:id` | Retrieve voucher details |
-| GET | `/review/:id/signature/:kind` | Retrieve an authorized signature |
-| POST | `/review/:id/approve` | Approve a voucher; Director only |
-| POST | `/review/:id/reject` | Reject a voucher; Director only |
-| GET | `/accounts/dashboard` | Retrieve Accounts dashboard statistics |
+| GET | `/api/vouchers/my` | Retrieve personal vouchers |
+| GET | `/api/vouchers/my/stats` | Retrieve employee dashboard statistics |
+| POST | `/api/vouchers` | Create a draft voucher |
+| PUT | `/api/vouchers/:id` | Update an owned draft |
+| DELETE | `/api/vouchers/:id` | Delete an owned draft |
+| POST | `/api/vouchers/:id/signature` | Upload an employee signature |
+| POST | `/api/vouchers/:id/submit` | Submit a signed voucher |
 
-### Optional Accounts Payment Extension
+### Director and Accounts APIs
 
 | Method | Endpoint | Purpose |
 |---|---|---|
-| GET | `/accounts/payments` | Retrieve the reimbursement queue |
-| PATCH | `/accounts/payments/:id` | Update an approved voucher's payment status |
+| GET | `/api/review` | View submitted vouchers |
+| GET | `/api/review/stats` | Retrieve review statistics |
+| GET | `/api/review/:id` | Retrieve voucher details |
+| GET | `/api/review/:id/signature/:kind` | Retrieve an authorized signature |
+| POST | `/api/review/:id/approve` | Approve a voucher |
+| POST | `/api/review/:id/reject` | Reject a voucher |
+| GET | `/api/accounts/dashboard` | Retrieve Accounts dashboard statistics |
 
-The Accounts payment endpoints are available only if the extension has been integrated into the final backend.
+### Optional Payment APIs
 
-### API Conventions
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/api/accounts/payments` | Retrieve reimbursement records |
+| PATCH | `/api/accounts/payments/:id` | Update payment status |
 
-- Authenticated requests use the configured authentication mechanism and token.
-- In the original implementation, protected endpoints use the `Authorization: Bearer <JWT>` header.
-- Signature uploads use `multipart/form-data`.
-- Backend authorization determines whether a request is permitted.
-- Request payloads must satisfy the application's validation rules.
+The payment endpoints require the Accounts extension to be present in the backend.
 
-The endpoint list documents the supplied API contract. Confirm the actual route registrations and request/response payloads in the repository before treating it as an exhaustive API reference.
+### API Request Flow
 
-## 11. Security and Validation
+```mermaid
+sequenceDiagram
+    actor User
+    participant UI as React Frontend
+    participant API as Express Backend
+    participant Auth as Auth and RBAC
+    participant DB as MySQL
 
-Security is a key consideration because the application handles employee records, expense amounts, authentication credentials, and signatures.
+    User->>UI: Perform an action
+    UI->>API: Send REST API request
+    API->>Auth: Check identity and permissions
 
-### Implemented Design Elements
+    alt Request is authorized
+        Auth-->>API: Access granted
+        API->>DB: Read or update records
+        DB-->>API: Return result
+        API-->>UI: Send response
+        UI-->>User: Display updated information
+    else Request is unauthorized
+        Auth-->>API: Reject request
+        API-->>UI: Return error response
+        UI-->>User: Display appropriate message
+    end
+```
 
-- JWT-based authentication.
-- Password hashing using bcryptjs.
-- Protected frontend routes.
-- Backend role-based authorization.
-- Employee ownership checks for voucher operations.
-- Parameterized SQL queries.
-- Validation of required voucher fields.
-- Positive-amount validation.
-- Employee signature requirement before submission.
-- Director signature requirement for approval.
-- Mandatory rejection reason.
-- Restrictions on modifying submitted or finalized claims.
-- Authenticated access to signature images.
+## 9. Authentication and Authorization
 
-### Security Notes
+I used JWT-based authentication and bcryptjs for password hashing.
 
-Frontend route protection improves navigation and user experience, but it is not a security boundary. Every sensitive backend endpoint must independently enforce authentication, authorization, ownership, and workflow-state rules.
+The backend is responsible for checking whether a user is authenticated and whether that user is allowed to perform a particular operation.
 
-Before production deployment, review token expiry and storage, secret management, upload validation, HTTPS configuration, rate limiting, CORS settings, and error handling. These controls should only be described as implemented after verification against the actual source code.
+For example:
 
-## 12. Project Structure
+- An employee can modify only their own draft vouchers.
+- An employee cannot approve or reject a voucher.
+- A Director can approve or reject submitted vouchers.
+- Accounts users can review organization-wide submitted vouchers.
+- Only authorized Accounts users can update reimbursement status when the extension is enabled.
 
-The following is the documented logical structure. Confirm the exact filenames and nesting against the repository.
+Protected routes on the frontend help control navigation, but the backend must enforce the actual permissions.
+
+### Security and Validation Rules
+
+The application requires the following validations:
+
+- Department, title, expense date, and a valid positive amount.
+- Employee signature before submission.
+- Director signature before approval.
+- A rejection reason when rejecting a voucher.
+- Ownership checks for employee-specific operations.
+- Role checks for approval and reimbursement operations.
+- Restrictions on editing vouchers after submission.
+
+I also used parameterized SQL queries for database operations and Multer with Sharp for signature upload and image processing.
+
+The precise token-storage approach, token expiry, upload validation rules, and production security settings should be verified against the final source code before deployment.
+
+## 10. Dashboard Design
+
+I created separate dashboards so that each user can view information relevant to their role.
+
+| Dashboard | Main Information |
+|---|---|
+| Employee | Total vouchers, drafts, pending claims, approved claims, rejected claims, and total amount claimed |
+| Director | Pending approvals, approval decisions, pending amount, and recent activity |
+| Accounts | Submitted vouchers, approval status distribution, approved expense amount, and recent approved vouchers |
+| Accounts payment extension | Vouchers awaiting reimbursement, completed reimbursements, and reimbursed amount |
+
+The purpose of these dashboards is to make the current state of the expense workflow easier to understand without manually checking individual records.
+
+## 11. Project Structure
+
+The documented project structure is organized into frontend and backend modules.
 
 ```text
 Expensio-Expense-Voucher-Management-System/
+│
 ├── backend/
 │   ├── database/
 │   │   ├── schema.sql
 │   │   └── accounts_payment_migration.sql
+│   │
 │   ├── src/
 │   │   ├── controllers/
 │   │   ├── routes/
 │   │   ├── middleware/
 │   │   └── services/
+│   │
 │   ├── scripts/
 │   │   └── seedUsers.js
+│   │
 │   ├── .env.example
 │   └── package.json
 │
@@ -399,31 +436,24 @@ Expensio-Expense-Voucher-Management-System/
 │   │   ├── api/
 │   │   ├── context/
 │   │   └── components/
+│   │
 │   └── package.json
 │
 └── README.md
 ```
 
-## 13. Getting Started
+The backend contains the API routes, controllers, middleware, and database-related files. The frontend contains the pages, shared components, API services, and session-related code.
 
-Follow these instructions to run the project locally.
+The exact file structure may vary slightly depending on the latest repository changes.
+
+## 12. How to Run the Project Locally
 
 ### Prerequisites
 
-Install the following tools:
-
-- Node.js 20 or a compatible version supported by the project's dependencies.
+- Node.js 20 or a compatible version supported by the project.
 - npm.
 - MySQL 8 or a compatible MySQL server.
 - Git.
-
-Verify your installations:
-
-```bash
-node --version
-npm --version
-git --version
-```
 
 ### Step 1: Clone the Repository
 
@@ -433,61 +463,57 @@ git clone https://github.com/tanuja-prasad/Expensio-Expense-Voucher-Management-S
 cd Expensio-Expense-Voucher-Management-System
 ```
 
-### Step 2: Configure MySQL
+### Step 2: Set Up the Database
 
-Create the application database using the provided schema:
+Open your MySQL client and execute the core schema:
 
 ```sql
 SOURCE backend/database/schema.sql;
 ```
 
-Run this command from a MySQL client connected to the appropriate server, with the correct working directory and database permissions.
+Make sure you are connected to the correct MySQL server and that the schema file is accessible from your current working directory.
 
-If the schema creates the database itself, do not rerun the database-creation statement against an existing installation.
+If the database already exists, check the schema before rerunning database-creation statements.
 
-### Step 3: Configure the Backend
-
-Open a terminal in the backend directory:
+### Step 3: Configure and Run the Backend
 
 ```bash
 cd backend
 npm install
 ```
 
-Copy `.env.example` to `.env` and configure the database connection, JWT secret, server port, and frontend origin.
+Copy `.env.example` to `.env` and configure the database credentials, JWT secret, port, and frontend URL.
 
-For example, the backend environment may require:
+Example configuration:
 
 ```env
 DB_HOST=localhost
 DB_USER=your_mysql_user
 DB_PASSWORD=your_mysql_password
 DB_NAME=your_database_name
-JWT_SECRET=replace_with_a_strong_random_secret
+JWT_SECRET=your_strong_random_secret
 PORT=5000
 CLIENT_URL=http://localhost:5173
 ```
 
-Use the exact variable names expected by the backend configuration. The values above are illustrative; verify them against `backend/.env.example`.
+Use the exact variable names required by the actual backend configuration.
 
-Start the backend:
+Start the backend using the script available in `backend/package.json`:
 
 ```bash
 npm run dev
 ```
 
-If the project uses a different development script, follow the scripts defined in `backend/package.json`.
+### Step 4: Configure and Run the Frontend
 
-### Step 4: Configure the Frontend
-
-Open a second terminal:
+Open a separate terminal:
 
 ```bash
 cd frontend
 npm install
 ```
 
-Create the frontend environment file, if required, and configure the API base URL:
+If the frontend uses the `VITE_API_BASE_URL` environment variable, configure it in `frontend/.env`:
 
 ```env
 VITE_API_BASE_URL=http://localhost:5000/api
@@ -501,100 +527,75 @@ npm run dev
 
 ### Step 5: Open the Application
 
-Visit:
+Open the local frontend URL:
 
 `http://localhost:5173`
 
-Sign in using an account provisioned for the corresponding role.
+Log in using an account configured for the required role.
 
-For local demonstrations, create separate Employee, Director, and Accounts accounts. Do not use shared or default credentials in a public deployment.
+For a complete demonstration, prepare separate Employee, Director, and Accounts accounts. The availability of demo users depends on the seed script and the current database setup.
 
-### Step 6: Optional Reimbursement Setup
+### Optional: Enable Reimbursement Tracking
 
-If the Accounts reimbursement extension is included in the final repository:
+If the payment extension has been merged:
 
-1. Verify that the backend routes, controller logic, and database integration for payments are present.
-2. Apply `backend/database/accounts_payment_migration.sql` once to the correct database.
-3. Verify that payment records are created or updated correctly.
-4. Confirm that only Accounts users can update payment status.
-5. Test that only approved vouchers can be marked paid or unpaid.
+1. Verify the migration against the core schema.
+2. Execute `backend/database/accounts_payment_migration.sql` once.
+3. Confirm the payment routes are registered.
+4. Test the Accounts-only authorization rules.
+5. Verify that reimbursement updates do not change the Director's approval decision.
 
-Do not apply an optional migration until its compatibility with the core schema has been confirmed.
+Never commit `.env` files, actual passwords, or production secrets to GitHub.
 
-## 14. Environment Configuration
+## 13. Challenges and Learning Outcomes
 
-Keep database credentials and authentication secrets outside version control.
+While developing Expensio, I worked on connecting the frontend, backend, and database into a single application.
 
-| Variable | Purpose |
-|---|---|
-| `DB_HOST` | MySQL server hostname |
-| `DB_USER` | MySQL username |
-| `DB_PASSWORD` | MySQL password |
-| `DB_NAME` | Application database |
-| `JWT_SECRET` | Secret used for JWT signing and verification |
-| `PORT` | Backend listening port |
-| `CLIENT_URL` | Frontend origin used by backend configuration |
+Some of the important concepts I explored through this project were:
 
-The required variables and their exact names depend on the repository's environment configuration.
+- Designing a relational database for users, vouchers, and approvals.
+- Connecting React components to Express REST APIs.
+- Managing authentication and protected routes.
+- Implementing different permissions for different user roles.
+- Handling file uploads for employee and Director signatures.
+- Validating expense information before allowing submission.
+- Managing voucher status transitions.
+- Separating the approval workflow from reimbursement tracking.
+- Organizing backend code into routes, controllers, middleware, and services.
+- Using Git and GitHub to maintain the project.
 
-**Never commit:**
+This project helped me understand how full-stack development involves more than building individual pages. The frontend, backend, database, authorization rules, and workflow must work together correctly.
 
-- `.env` files containing real credentials.
-- Database passwords.
-- Production JWT secrets.
-- Real user credentials or private signature files.
+## 14. Future Enhancements
 
-Commit a sanitized `.env.example` containing placeholder values instead.
+Some improvements I would like to explore in future versions are:
 
-## 15. Future Enhancements
-
-Potential improvements that could extend the application include:
-
-- Automated email notifications for voucher submission, approval, and rejection.
-- A complete, immutable reimbursement transaction history.
-- Receipt and invoice attachments.
-- Advanced reporting with export to CSV or PDF.
-- Pagination and optimized filtering for large voucher registers.
-- Automated backend and frontend test suites in CI.
+- Email notifications for submission, approval, and rejection.
+- Receipt and invoice uploads.
+- Exporting voucher reports to PDF or Excel.
+- A complete reimbursement history.
+- More advanced expense analytics.
+- Automated testing for APIs and user workflows.
 - Deployment with HTTPS and managed database hosting.
-- Audit logging for all significant workflow transitions.
-- Improved accessibility and responsive design.
-- More detailed expense trend and department-level analytics.
+- Improved reporting and filtering for larger datasets.
 
-These are proposed enhancements, not claims about existing functionality.
+These are possible future enhancements and are not intended to indicate that they are already implemented.
 
-## 16. Learning Outcomes
+## 15. Conclusion
 
-Developing Expensio provides practical experience with:
+Through Expensio, I developed a full-stack application for managing employee expense vouchers, Director approvals, and Accounts review.
 
-- Building a full-stack application using React and Node.js.
-- Designing and consuming REST APIs.
-- Modeling relational data in MySQL.
-- Implementing authentication and role-based authorization.
-- Structuring backend routes, controllers, middleware, and services.
-- Validating user input and enforcing workflow rules.
-- Handling file uploads and signature images.
-- Connecting frontend forms and dashboards to backend services.
-- Managing source code and project changes using Git and GitHub.
-- Translating a business workflow into an application design.
+The project combines React, Node.js, Express.js, and MySQL with authentication, role-based authorization, REST APIs, database operations, and signature handling.
 
-## 17. Project Status
-
-Expensio is an academic full-stack development project focused on expense voucher lifecycle management.
-
-The core documented scope includes employee voucher creation and submission, Director approval or rejection, role-specific dashboards, signature handling, and Accounts review. Reimbursement status tracking is an additional extension whose integration should be confirmed in the final repository.
-
-**Verification note:** This README is based on the supplied project documentation. It does not independently establish that every listed feature is present in the current GitHub commit, that automated tests pass, or that a production deployment exists. Verify the code, environment configuration, migrations, and deployment status before making those claims.
-
-## 18. Author
-
-**Tanuja Prasad**  
-Master of Computer Applications (MCA)  
-MIT World Peace University, Pune
-
-- GitHub: [@tanuja-prasad](https://github.com/tanuja-prasad)
-- Project Repository: [Expensio — Expense Voucher Management System](https://github.com/tanuja-prasad/Expensio-Expense-Voucher-Management-System)
+Working on this application helped me understand how to design and implement a business workflow using different components of a web application. It also gave me practical experience in organizing code, managing data, validating user actions, and maintaining separate permissions for different roles.
 
 ---
 
-*Expensio — Streamlining expense claims through structured workflows, role-based access, and centralized voucher management.*
+## Author
+
+**Tanuja Prasad**  
+MCA Student, MIT World Peace University, Pune
+
+- GitHub Profile: [tanuja-prasad](https://github.com/tanuja-prasad)
+- Project Repository: [Expensio – Expense Voucher Management System](https://github.com/tanuja-prasad/Expensio-Expense-Voucher-Management-System)
+
