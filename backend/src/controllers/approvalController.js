@@ -287,6 +287,10 @@ exports.stats = async (req, res) => {
           ),
           0
         ) AS approved_amount
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 84e170be3bf89f109130e2d30a99b880e1f98c54
 ,
         COALESCE(
           SUM(
@@ -298,6 +302,11 @@ exports.stats = async (req, res) => {
           ),
           0
         ) AS rejected_amount
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 6e4a5a4353d2d392c137d0d32455bf66d8e775d5
+>>>>>>> 84e170be3bf89f109130e2d30a99b880e1f98c54
 
       FROM vouchers
       WHERE status <> 'DRAFT'
