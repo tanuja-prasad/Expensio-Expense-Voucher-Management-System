@@ -31,6 +31,7 @@
 @keyframes exp-track{50%{transform:translateX(120%)}}
 @keyframes exp-pop{50%{transform:scale(1.13)}}
 @media(prefers-reduced-motion:reduce){.exp-motion-scene *{animation:none!important}}
+<<<<<<< HEAD
 
 
 /* Director dashboard: aligned, responsive analytics and decision controls */
@@ -119,3 +120,5 @@
 .overview-activity{padding:0 18px}.overview-activity-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 4px;border-top:1px solid #edf1f5;text-decoration:none;color:inherit;min-width:0}.overview-activity-row:hover{background:#f8fbff}.overview-activity-copy{min-width:0}.overview-activity-copy p{font-size:14px;font-weight:750;color:#12334b;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.overview-activity-copy span{display:block;font-size:11px;color:#8391a0;margin-top:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.overview-activity-right{display:flex;align-items:center;gap:12px;flex-shrink:0}.overview-activity-right strong{font-size:13px;color:#12334b}.overview-status{font-size:10px;text-transform:capitalize;border-radius:20px;padding:5px 8px;background:#eef4fb;color:#426078;font-weight:750;white-space:nowrap}.overview-empty{font-size:13px;color:#718092;padding:0 22px 22px}
 @media(max-width:850px){.overview-charts{grid-template-columns:1fr}.overview-panel{padding:18px}}
 @media(max-width:520px){.overview-metrics{grid-auto-columns:150px}.overview-donut-layout{gap:20px}.overview-activity-row{align-items:flex-start}.overview-activity-right{gap:8px;flex-wrap:wrap;justify-content:flex-end}.overview-status{display:none}.overview-recent>.overview-panel-heading{padding:18px 16px 13px}.overview-activity{padding:0 13px}}
+=======
+>>>>>>> 6e4a5a4353d2d392c137d0d32455bf66d8e775d5

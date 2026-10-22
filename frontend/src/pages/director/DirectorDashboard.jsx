@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useCallback, useEffect, useState } from "react";
 import { Check, X, Clock3, CheckCircle2, XCircle, IndianRupee, FileText, RefreshCw, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -167,3 +168,9 @@ export default function DirectorDashboard() {
     </main>
   );
 }
+=======
+import {useEffect,useState} from 'react';
+import DashboardOverview from '../../components/DashboardOverview';
+import {reviewApi} from '../../api/review';
+export default function DirectorDashboard(){const [stats,setStats]=useState(null);const [error,setError]=useState('');const [recent,setRecent]=useState([]);useEffect(()=>{Promise.all([reviewApi.stats(),reviewApi.list({sort:'recent'})]).then(([a,b])=>{setStats(a.data.data);setRecent(b.data.data.slice(0,5))}).catch(e=>setError(e.response?.data?.message||'Failed to load dashboard'))},[]);const metrics=stats?[{label:'Pending Approvals',value:stats.pending,icon:'pending'},{label:'Approved Today',value:stats.approved_today,icon:'approved'},{label:'Rejected Today',value:stats.rejected_today,icon:'rejected'},{label:'Total Pending Amount',value:`₹${Number(stats.pending_amount).toLocaleString("en-IN")}`,icon:'amount'}]:[];return <div>{error&&<p role="alert" className="mb-4 text-red-700">{error}</p>}<DashboardOverview title="Director Dashboard" recent={recent} basePath="/director/vouchers" metrics={metrics}/></div>}
+>>>>>>> 6e4a5a4353d2d392c137d0d32455bf66d8e775d5
