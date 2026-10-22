@@ -1,0 +1,2 @@
+import api from './axios';
+export const reviewApi={list:(params)=>api.get('/review',{params}),get:(id)=>api.get(`/review/${id}`),stats:()=>api.get('/review/stats'),approve:(id,file)=>{const body=new FormData();body.append('signature',file);return api.post(`/review/${id}/approve`,body)},approveWithProfile:(id)=>api.post(`/review/${id}/approve-with-profile`),reject:(id,reason)=>api.post(`/review/${id}/reject`,{reason}),signature:(id,kind)=>api.get(`/review/${id}/signature/${kind}`,{responseType:'blob'})};
