@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 84e170be3bf89f109130e2d30a99b880e1f98c54
+
 # Expensio — Expense Voucher Management System
 
 
